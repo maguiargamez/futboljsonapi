@@ -1,0 +1,97 @@
+models:
+  CoachingStaffType:
+    name: string:255 unique
+    short_code: char:4 unique
+    is_active: boolean
+    softDeletes
+
+  League:
+    name: string:255 unique
+    public_name: string:255
+    is_active: boolean
+    softDeletes
+    relationships:
+      hasMany: Tournament
+  
+  Tournament:
+    league_id: id foreign
+    name: string:255 unique
+    public_name: string:255
+    short_code: char:4
+    sequence: integer:10
+    promotion_zone: integer:3
+    relegation_zone: integer:3
+    featured_position: boolean
+    hide_ranking: boolean
+    hide_players: boolean
+    hide_field: boolean
+    is_active: boolean
+    softDeletes
+    relationships:
+      hasMany: Team
+  
+  Team:
+    tournament_id: id foreign
+    name: string:255 unique
+    public_name: string:255
+    short_code: char:4
+    logo: string:255
+    owner: string:255 nullable
+    owner_email: string:100 nullable
+    owner_phone: string:100 nullable
+    about: text
+    archive_team: boolean
+    is_active: boolean
+    softDeletes
+    relationships:
+      hasMany: Player, CoachingStaff
+  
+  Player:
+    team_id: id foreign
+    firstname: string:255
+    lastname: string:255
+    date_of_birth: date
+    sex: boolean
+    email: string:100 nullable
+    phone: string:100 nullable
+    number: integer:6
+    position: char:4
+    is_active: boolean
+    softDeletes
+    relationships:
+      hasMany: MatchGol
+
+  CoachingStaff:
+    team_id: id foreign    
+    coaching_staff_type: char:4
+    firstname: string:255
+    lastname: string:255
+    date_of_birth: date
+    sex: boolean
+    email: string:100 nullable
+    phone: string:100 nullable
+    is_active: boolean
+    softDeletes
+
+  Match:
+    tournament_id: id foreign
+    home_team_id: id foreign
+    home_team: string:255
+    away_team_id: id foreign
+    away_team: string:255
+    score: string:100 nullable
+    softDeletes
+    relationships:
+      hasMany: MatchGol
+
+  MatchGol:
+    match_id: id foreign
+    player_id: id foreign
+    player_name: string:255
+    number: integer:6
+    position: char:4
+    minute: integer:6
+    is_penalty: boolean
+    penalty_shoots: boolean    
+    softDeletes
+   
