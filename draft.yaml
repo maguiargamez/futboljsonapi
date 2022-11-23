@@ -84,7 +84,7 @@ models:
     relationships:
       hasMany: MatchGol
 
-  MatchGol:
+  MatchGoal:
     match_id: id foreign
     player_id: id foreign
     player_name: string:255

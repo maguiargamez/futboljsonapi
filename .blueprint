@@ -1,2 +1,35 @@
+created:
+    - database/factories/CoachingStaffTypeFactory.php
+    - database/factories/LeagueFactory.php
+    - database/factories/TournamentFactory.php
+    - database/factories/TeamFactory.php
+    - database/factories/PlayerFactory.php
+    - database/factories/CoachingStaffFactory.php
+    - database/factories/MatchFactory.php
+    - database/factories/MatchGolFactory.php
+    - database/migrations/2022_11_23_155102_create_coaching_staff_types_table.php
+    - database/migrations/2022_11_23_155103_create_leagues_table.php
+    - database/migrations/2022_11_23_155104_create_tournaments_table.php
+    - database/migrations/2022_11_23_155105_create_teams_table.php
+    - database/migrations/2022_11_23_155106_create_players_table.php
+    - database/migrations/2022_11_23_155107_create_coaching_staff_table.php
+    - database/migrations/2022_11_23_155108_create_matches_table.php
+    - database/migrations/2022_11_23_155109_create_match_gols_table.php
+    - app/Models/CoachingStaffType.php
+    - app/Models/League.php
+    - app/Models/Tournament.php
+    - app/Models/Team.php
+    - app/Models/Player.php
+    - app/Models/CoachingStaff.php
+    - app/Models/Match.php
+    - app/Models/MatchGol.php
 models:
     User: {  }
+    CoachingStaffType: { name: 'string:255 unique', short_code: 'char:4 unique', is_active: boolean, softdeletes: softDeletes }
+    League: { name: 'string:255 unique', public_name: 'string:255', is_active: boolean, softdeletes: softDeletes, relationships: { hasMany: Tournament } }
+    Tournament: { league_id: 'id foreign', name: 'string:255 unique', public_name: 'string:255', short_code: 'char:4', sequence: 'integer:10', promotion_zone: 'integer:3', relegation_zone: 'integer:3', featured_position: boolean, hide_ranking: boolean, hide_players: boolean, hide_field: boolean, is_active: boolean, softdeletes: softDeletes, relationships: { hasMany: Team } }
+    Team: { tournament_id: 'id foreign', name: 'string:255 unique', public_name: 'string:255', short_code: 'char:4', logo: 'string:255', owner: 'string:255 nullable', owner_email: 'string:100 nullable', owner_phone: 'string:100 nullable', about: text, archive_team: boolean, is_active: boolean, softdeletes: softDeletes, relationships: { hasMany: 'Player, CoachingStaff' } }
+    Player: { team_id: 'id foreign', firstname: 'string:255', lastname: 'string:255', date_of_birth: date, sex: boolean, email: 'string:100 nullable', phone: 'string:100 nullable', number: 'integer:6', position: 'char:4', is_active: boolean, softdeletes: softDeletes, relationships: { hasMany: MatchGol } }
+    CoachingStaff: { team_id: 'id foreign', coaching_staff_type: 'char:4', firstname: 'string:255', lastname: 'string:255', date_of_birth: date, sex: boolean, email: 'string:100 nullable', phone: 'string:100 nullable', is_active: boolean, softdeletes: softDeletes }
+    Match: { tournament_id: 'id foreign', home_team_id: 'id foreign', home_team: 'string:255', away_team_id: 'id foreign', away_team: 'string:255', score: 'string:100 nullable', softdeletes: softDeletes, relationships: { hasMany: MatchGol } }
+    MatchGol: { match_id: 'id foreign', player_id: 'id foreign', player_name: 'string:255', number: 'integer:6', position: 'char:4', minute: 'integer:6', is_penalty: boolean, penalty_shoots: boolean, softdeletes: softDeletes }
