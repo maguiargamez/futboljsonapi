@@ -21,8 +21,14 @@ class LeagueController extends Controller
         return LeagueResource::make($league);
     }
 
-    public function create(Request $request)
+    public function create(Request $request): LeagueResource
     {
+        $request->validate([
+            'data.attributes.name' => ['required', 'min:4'],
+            'data.attributes.public_name' => ['required'],
+            'data.attributes.is_active' => ['required'],
+        ]);
+
         $league = League::create([
             'name' => $request->input('data.attributes.name'),
             'public_name' => $request->input('data.attributes.public_name'),
